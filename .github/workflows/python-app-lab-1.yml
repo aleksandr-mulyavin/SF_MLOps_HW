@@ -27,6 +27,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f ./Lab_1/requirements.txt ]; then pip install -r ./Lab_1/requirements.txt; fi
-    - name: Run Pipelint
+    - name: Run Pipeline
       run: |
-        ./Lab_1/pipeline.sh
+        cd ./Lab_1/
+        ./pipeline.sh
