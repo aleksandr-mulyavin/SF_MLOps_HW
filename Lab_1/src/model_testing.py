@@ -35,8 +35,8 @@ def model_test(test_df: pd.DataFrame, filename: str) -> float:
 
 if __name__ == '__main__':
     # Чтение данных из наборов данных (только тестовые обработанные)
-    test_file_list = [name for name in os.listdir('./data/test/') \
-                    if name.endswith(".csv") and '_clear' in name]
+    test_file_list = sorted([name for name in os.listdir('./data/test/') \
+                             if name.endswith(".csv") and '_clear' in name])
 
     for data_file in test_file_list:
         print(f'-> Обработка файла: {data_file}')

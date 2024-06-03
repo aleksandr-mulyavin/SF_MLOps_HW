@@ -34,8 +34,8 @@ def train_model(train_df: pd.DataFrame, filename: str) -> None:
 
 if __name__ == '__main__':
     # Чтение данных из наборов данных (только обработанные)
-    train_file_list = [name for name in os.listdir('./data/train/') \
-                    if name.endswith(".csv") and '_clear' in name]
+    train_file_list = sorted([name for name in os.listdir('./data/train/') \
+                              if name.endswith(".csv") and '_clear' in name])
 
     for data_file in train_file_list:
         print(f'-> Обработка файла: {data_file}')

@@ -98,8 +98,8 @@ def preprocess_data(train_df: pd.DataFrame, test_df: pd.DataFrame) -> tuple[pd.D
 
 if __name__ == '__main__':
     # Чтение данных из наборов данных
-    train_file_list = [name for name in os.listdir('./data/train/') \
-                       if name.endswith(".csv") and '_clear' not in name]
+    train_file_list = sorted([name for name in os.listdir('./data/train/') \
+                              if name.endswith(".csv") and '_clear' not in name])
 
     for data_file in train_file_list:
         print(f'-> Обработка файлов: {data_file}')
