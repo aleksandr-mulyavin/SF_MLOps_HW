@@ -216,10 +216,20 @@ def get_dataset_3(base_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     base_3_df = base_df.copy(deep=True)
 
     # Генерация шума для стажа работы (кто то приверает на 1 или 2 года)
-    work_experience_noise_koef = np.random.choice([0, 1, 2], SAMPLE_SIZE, p=[0.9, 0.08, 0.02])
+    work_experience_noise_koef = np.random.choice([0, 1, 2], SAMPLE_SIZE, p=[0.8, 0.14, 0.06])
 
     # Добавление шума в отдельный столбец
     base_3_df["WORK_EXPERIENCE_YEARS"] = base_3_df["WORK_EXPERIENCE_YEARS"] + work_experience_noise_koef
+
+    # Генерация шума для целевой переменной в диапазоне от 0.3 до -0.3
+    salary_noise_koef = np.random.uniform(
+        low=SALARY_NOISE_LOW, 
+        high=SALARY_NOISE_HIGH, 
+        size=SAMPLE_SIZE)
+    
+    # Добавление шума в отдельный столбец
+    base_3_df["SALARY"] = base_3_df["SALARY"] + base_3_df["SALARY"] * salary_noise_koef
+
 
     # Генерация выбросов по ЗП (выбросы почти в разы)
     outliers_koef = np.random.choice([-2.5, -2, 0, 2, 3], SAMPLE_SIZE, p=[0.01, 0.04, 0.9, 0.04, 0.01])
