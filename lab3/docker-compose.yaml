@@ -1,0 +1,64 @@
+version: '3.3'
+
+services:
+  mlops-lab3-model:
+    container_name: mlops-lab3-model
+    image: mlops-lab3-model:tmp
+    build: 
+      context: ./../lab1
+      dockerfile: Dockerfile
+    volumes:
+      - api_model:/model
+    healthcheck:
+      test: ["CMD-SHELL", "test -e /model/data/test/data1.csv"]
+      timeout: 3s
+      interval: 10s
+      retries: 20
+
+  mlops-lab3-api:
+    container_name: mlops-lab3-api
+    image: mlops-lab3-api:latest
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    networks:
+      - mlops-net
+    ports:
+      - "8080:8080"
+    volumes:
+      - api_home:/app
+      - api_model:/model
+    environment:
+      - MODEL_PATH=./../../model/models
+    depends_on:
+      mlops-lab3-model:
+        condition: service_healthy
+  
+  mlops-lab3-client:
+    container_name: mlops-lab3-client
+    image: mlops-lab3-client:latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    networks:
+      - mlops-net
+    volumes:
+      - client_home:/app
+      - api_model:/model
+    environment:
+      - API_HOST=mlops-lab3-api
+      - API_PORT=8080
+      - DATA_PATH=./../../model/data/test
+    depends_on:
+      mlops-lab3-model:
+        condition: service_healthy
+      mlops-lab3-api:
+        condition: service_started
+
+networks:
+  mlops-net:
+
+volumes:
+  api_home:
+  api_model:
+  client_home:
