@@ -13,6 +13,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 
+from joblib import dump
+
+
 #############################################################################
 # Основные функции
 #############################################################################
@@ -26,7 +29,8 @@ def save_dataset(df: pd.DataFrame, name: str, isTest:bool = False) -> None:
     df.to_csv(f"{path}/{name}.csv", index=False)
 
 
-def preprocess_data(train_df: pd.DataFrame, test_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def preprocess_data(train_df: pd.DataFrame, test_df: pd.DataFrame
+                    ) -> tuple[pd.DataFrame, pd.DataFrame, ColumnTransformer]:
     '''Функция предварительной обработки данных'''
     # В учебных целях мудрить не будем, сделаем базовые преобразования
     # - One-Hot кодирование для признаков с малым количеством значений:
@@ -44,10 +48,12 @@ def preprocess_data(train_df: pd.DataFrame, test_df: pd.DataFrame) -> tuple[pd.D
     # иначе может не корректно просчитаться коэффициент
     # ИМХО: Делитьн на наборы надо именно тут!
     full_df = pd.concat([train_df, test_df]) 
- 
- 
+    y_train = train_df['SALARY']
+    y_test = test_df['SALARY']
+    full_df = full_df.drop('SALARY', axis=1)
+
     one_hot_cols: list = ['JOB_TITLE_NAME', 'EMPLOYMENT_TYPE_NAME', 'WORK_MODEL_NAME', 'WORK_GRADE_NAME']
-    stand_scaler_cols: list = ['WORK_EXPERIENCE_YEARS', 'YEAR', 'SALARY']
+    stand_scaler_cols: list = ['WORK_EXPERIENCE_YEARS', 'YEAR']
 
     # Создание pipeline для One-Hot кодирования
     pipe_one_hot = Pipeline([
@@ -90,10 +96,12 @@ def preprocess_data(train_df: pd.DataFrame, test_df: pd.DataFrame) -> tuple[pd.D
     # Трансформация данных
     copy_train_df = pd.DataFrame(preprocessors.transform(train_df.copy(deep=True)),
                                  columns=trans_cols_list)
+    copy_train_df['SALARY'] = y_train
     copy_test_df = pd.DataFrame(preprocessors.transform(test_df.copy(deep=True)),
                                 columns=trans_cols_list)
+    copy_test_df['SALARY'] = y_test
 
-    return copy_train_df, copy_test_df
+    return copy_train_df, copy_test_df, preprocessors
 
 
 if __name__ == '__main__':
@@ -109,7 +117,12 @@ if __name__ == '__main__':
         data_train_df = pd.read_csv(f"./data/train/{data_file}")
         data_test_df = pd.read_csv(f"./data/test/{data_file}")
 
-        data_train_df, data_test_df = preprocess_data(data_train_df, data_test_df)
+        data_train_df, data_test_df, preprocessors = preprocess_data(data_train_df, data_test_df)
 
         save_dataset(data_train_df,  data_file.replace(".csv", "_clear", 1))
         save_dataset(data_test_df,  data_file.replace(".csv", "_clear", 1), isTest=True)
+        
+        # Сохранение трансформера для потомковка данных для
+        if not os.path.exists('./models/'):
+            os.makedirs('./models/')
+        dump(preprocessors, f'./models/transformer_{data_file.replace(".csv", ".joblib", 1)}')

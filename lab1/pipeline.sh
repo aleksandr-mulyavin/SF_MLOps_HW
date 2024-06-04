@@ -6,7 +6,7 @@
 
 # Установка зависимостей 
 echo "Установка зависемостей"
-pip3 install -r ./requirements.txt
+pip3 install -r ./requirements.txt --no-cache-dir
 
 # Этап 1: Генерация данных
 echo "Генерация данных"
