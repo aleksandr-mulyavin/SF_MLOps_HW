@@ -15,7 +15,7 @@ DATASET_URL = 'https://storage.googleapis.com/kagglesdsdata/competitions/10118/1
 
 if __name__ == "__main__":
     if not os.path.exists(DATASET_PATH):
-        raise RuntimeError(f'Пути {DATASET_PATH} не существует')
+        os.makedirs(DATASET_PATH)
     # Загрузка датасета
     df_titan = pd.read_csv(DATASET_URL, delimiter = ',')
     if df_titan is None or not len(df_titan):
