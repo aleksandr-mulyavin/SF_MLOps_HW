@@ -84,8 +84,6 @@
 * Файл настроек DVC - [```/lab4/.dvc/config```](/lab4/.dvc/config)
 * Файл отслеживания версий - [```/lab4/datasets.dvc```](/lab4/datasets.dvc)
 
-Ссылка на диск с версиями данных - https://drive.google.com/drive/folders/1kvubAVGrxR9x8KvUfgirijn4aTAUTpbu
-
 Список коммитов фиксации DVC:
 * ```c7c8ab4``` Инициализация и настройка DVC, создание скриптов для обработки данных
 * ```d43a86c``` DVC Данные скачаны и сохранены
