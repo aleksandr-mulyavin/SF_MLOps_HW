@@ -51,6 +51,19 @@
 В третьей вариации данных шум и выбросы еще сильнее снизили метрику. В ходе экспериментов установлено, что шумы гораздо сильнее снижали метрику. 
 
 
+## Практическое задание №2 (vo_HW)
+
+Решение Практического задания №5 в каталоге [```/lab2/```](/lab2/):
+* Скрипты обработки данных находятся в [```/lab2/src/```](/lab2/src/):
+    * [```step_1_download_data.py```](/lab2/src/step_1_download_data.py) - скачивание датасета Титаник
+    * [```step_2_clear_dataset.py```](/lab2/src/step_2_clear_dataset.py) - очистка данных
+    * [```step_3_model_prepare.py```](/lab2/src/step_3_model_prepare.py) - обучение моделей
+    * [```step_4_model_test.py```](/lab2/src/step_4_model_test.py) - тестирование метрик
+* Файл [Jenkins Pipeline](/lab2/Jenkinsfile) для создания пайплайна в Jenkins
+* Файлы [```Dockerfile```](/lab2/Dockerfile) и [```docker-compose.yaml```](/lab2/docker-compose.yaml) для развертывание контейнера с Jenkins
+
+
+
 ## Практическое задание №3 (vo_HW)
 
 Решение Практического задания №3 в каталоге [```/lab3/```](/lab3/):

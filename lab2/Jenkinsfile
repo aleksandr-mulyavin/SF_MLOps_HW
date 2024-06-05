@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Установка зависимостей') {
+            steps {
+                dir('lab2') {
+                    sh '''python3 -m venv .venv
+                    . .venv/bin/activate
+                    pip install -r ./requirements.txt'''
+                }
+            }
+        }
+
+        stage('Загрузка датасета') {
+            steps {
+                dir('lab2') {
+                    sh '''. .venv/bin/activate
+                    python3 ./src/step_1_download_data.py'''
+                }
+            }
+        }
+
+        stage('Обработка данных') {
+            steps {
+                dir('lab2') {
+                    sh '''. .venv/bin/activate
+                    python3 ./src/step_2_clear_dataset.py'''
+                }
+            }
+        }
+
+        stage('Обучение модели') {
+            steps {
+                dir('lab2') {
+                    sh '''. .venv/bin/activate
+                    python3 ./src/step_3_model_prepare.py'''
+                }
+            }
+        }
+
+        stage('Тест моделей') {
+            steps {
+                dir('lab2') {
+                    sh '''. .venv/bin/activate
+                    python3 ./src/step_4_model_test.py'''
+                }
+            }
+        }
+    }
+}
