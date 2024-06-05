@@ -1,2 +1,4 @@
 [core]
     no_scm = True
+['remote "gdisk"']
+    url = gdrive://1kvubAVGrxR9x8KvUfgirijn4aTAUTpbu
